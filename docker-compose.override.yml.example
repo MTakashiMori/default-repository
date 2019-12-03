@@ -1,0 +1,15 @@
+version: '3.7'
+services:
+  web:
+    ports:
+        - "8000:80"
+  db:
+    ports:
+        - "3306:3306"
+    volumes:
+        - /var/www/html/db/app:/var/lib/mysql
+    environment:
+        MYSQL_ROOT_PASSWORD: 06041944
+        MYSQL_DATABASE: app_db
+        MYSQL_USER: user_user
+        MYSQL_PASSWORD: p@ssw0rd
