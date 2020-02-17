@@ -18,8 +18,8 @@ class ServiceAbstract
     protected $repository;
 
     /**
-     * @param $request array
-     * @return mixed Collection
+     * @param $request
+     * @return Collection
      */
     public function all($request)
     {
@@ -27,8 +27,18 @@ class ServiceAbstract
             $size = $request['size'] :
             $size = 15;
 
+        isset($request['sortBy']) ?
+            $field = $request['sortBy'] :
+            $field = null;
+
+        isset($request['orderDesc']) ?
+            $order = $request['orderDesc'] :
+            $order = null;
+
         unset($request['page']);
         unset($request['size']);
+        unset($request['sortBy']);
+        unset($request['orderDesc']);
 
         $data = collect([
             'message' => __('messages.list'),
@@ -37,7 +47,7 @@ class ServiceAbstract
         ]);
 
         try {
-            $data['data'] = $this->repository->all($request)->paginate($size);
+            $data['data'] = $this->repository->all($request, $field, $order)->paginate($size);
             return $data;
 
         } catch (Exception $e) {

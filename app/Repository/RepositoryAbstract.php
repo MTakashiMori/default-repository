@@ -27,15 +27,27 @@ class RepositoryAbstract
 
     /**
      * @param $request
+     * @param $field
+     * @param $order
      * @return mixed
      */
-    public function all($request)
+    public function all($request, $field = null, $order = null)
     {
+        $data = $this->model;
+
+        if($field || $order) {
+            (filter_var($order, FILTER_VALIDATE_BOOLEAN)) ?
+                $order = 'DESC' :
+                $order = 'ASC';
+
+            $data = $data->orderBy($field, $order);
+        }
+
         if($request)
         {
-            return $this->model->like($request);
+            return $data->like($request);
         }
-        return $this->model->with($this->relationship);
+        return $data->with($this->relationship);
     }
 
     /**
